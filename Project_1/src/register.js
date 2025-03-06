@@ -27,7 +27,7 @@ const Register = ({ setShowRegister }) => {
             <div className="row justify-content-center">
                 <div className="col-md-6">
                     <div className="card">
-                        <div className="card-header bg-success text-white">
+                        <div className="card-header bg text-white">
                             <h3 className="text-center">Create Account</h3>
                         </div>
                         <div className="card-body">
@@ -68,7 +68,7 @@ const Register = ({ setShowRegister }) => {
                                     onChange={handleChange}
                                     required
                                 />
-                                <button type="submit" className="btn btn-success w-100">
+                                <button type="submit" className="btn btn text-white w-100">
                                     Register
                                 </button>
                             </form>
