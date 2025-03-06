@@ -7,6 +7,7 @@ import Home from "./home";
 import SignIn from "./signin"; // Assuming SignIn is in the same folder
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import logo from "./logo.png";
 
 
 function App() {
@@ -15,7 +16,7 @@ function App() {
       <Navbar />
       {/* <ScrollToTop />  */}
       <Routes>
-        <Route path="/" element={<SignIn />} />
+        <Route path="/signin" element={<SignIn />} />
         {/* <Route path="/" element={<Home />} /> */}
         {/* <Route path="/about" element={<About />} /> */}
         {/* <Route path="/contact" element={<Contact />} /> */}
