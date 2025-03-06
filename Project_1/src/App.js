@@ -10,6 +10,7 @@ import Register from "./register"; // Adjust path based on your structure
 
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
+import Home from "./home";
 
 
 
@@ -18,13 +19,15 @@ function App() {
     <Router>
       <Navbar />
       {/* <ScrollToTop />  */}
+      
       <Routes>
-        {/* <Route path="/about" element={<About />} /> */}
+        <Route path="/" element={<Home />} />
         {/* <Route path="/contact" element={<Contact />} /> */}
         <Route path="/signin" element={<SignIn />} />
         <Route path="/register" element={<Register />} />
       </Routes>
     </Router>
+    
   );
 }
 

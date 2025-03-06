@@ -1,57 +1,83 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Contact Us - SeptaSys7ems</title>
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-<!--<link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">--> 
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - SeptaSys7ems</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .full-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+        }
+    </style>
 </head>
-<body>
-<header>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Contact Us
-        <img src="https://i.imgur.com/fubQ4Lr.png" alt="Logo" style="height: 60px; width: 60px;">
-    </a>
+<body class="full-screen">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">SeptaSys7ems</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="signin.html">Sign In</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li> -->
+                    <li class="nav-item"><button class="nav-link btn btn-link text-white" onclick="handleLogout()">Sign Out</button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="collapse navbar-collapse">
-        <!-- Right-aligned navigation links -->
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        </ul>
-    </div>
-</nav>
-</header>
-<section class="contact">
-  <div class="container">
-    <h1>Contact Us</h1>
-    <p>If you have any questions, feel free to reach out to us!</p>
-    <form action="submit_form.php" method="POST">
-      <!-- You can change the action to point to your form handler -->
-      <div class="form-group">
-        <label for="name">Full Name</label>
-        <input type="text" id="name" name="name" required placeholder="Your full name">
-      </div>
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" name="email" required placeholder="Your email address">
-      </div>
-      <div class="form-group">
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="4" required placeholder="Your message here"></textarea>
-      </div>
-      <button type="submit" class="btn-submit">Submit</button>
-    </form>
-  </div>
-</section>
-<footer>
-  <div class="container">
-    <p>&copy; 2025 SeptaSys7ems. All rights reserved.</p>
-</div>
-</footer>
+    <!-- Contact Section -->
+    <section class="contact mt-5 pt-5 content">
+        <div class="container">
+            <h1>Contact Us</h1>
+            <p>If you have any questions, feel free to reach out to us!</p>
+            <form action="submit_form.php" method="POST">
+                <div class="form-group">
+                    <label for="name">Full Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required placeholder="Your full name">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email Address</label>
+                    <input type="email" id="email" name="email" class="form-control" required placeholder="Your email address">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" name="message" class="form-control" rows="4" required placeholder="Your message here"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Submit</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer Section -->
+    <footer class="footer bg-dark text-white py-3">
+        <div class="container text-center">
+            <p class="footer-text mb-0">© 2025 SeptaSys7ems. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Link to Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function handleLogout() {
+            alert('Logged out successfully!');
+        }
+    </script>
 </body>
 </html>

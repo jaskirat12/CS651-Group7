@@ -5,117 +5,120 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us - SeptaSys7ems</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-	<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        .full-screen {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .content {
+            flex: 1;
+        }
+    </style>
 </head>
 
-<body>
-  <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">About Us
-        <img src="https://i.imgur.com/fubQ4Lr.png" alt="Logo" style="height: 60px; width: 60px;">
-    </a>
+<body class="full-screen">
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="/">SeptaSys7ems</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
+                    <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
+                    <li class="nav-item"><a class="nav-link" href="signin.html">Sign In</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link" href="register.html">Register</a></li> -->
+                    <li class="nav-item"><button class="nav-link btn btn-link text-white" onclick="handleLogout()">Sign Out</button></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
 
-    <div class="collapse navbar-collapse">
-        <!-- Right-aligned navigation links -->
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-            <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-        </ul>
-    </div>
-</nav>
-
-  <!-- Main Content -->
-  <section class="about-section">
-      <div class="container">
-          <div class="row">
-              <!-- Company Overview Section -->
-              <div class="col-lg-6">
-                  <h1 class="about-title">About Us</h1>
-                  <p class="about-text">
-                      Welcome to SeptaSy7ems, we are a computer vision and machine learning startup company. We focus on utilizing image recognition technology to keep our customers safe and secure.
-                  </p>
-              </div>
-
-              <!-- Mission and Values Section -->
-              <div class="col-lg-6">
-                  <h2 class="about-subtitle">Our Mission</h2>
-                  <p class="about-text">
-                    Our mission is to protect our customers from theft. No longer will porch pirates steal your Amazon packages without being caught. Our flagship security system detects intruders and sends it straight to authorities for investigation.
-                  </p>
-                  <h3 class="about-subtitle">Core Values</h3>
-                  <ul class="about-list">
-                      <li><strong>Innovation:</strong> We believe software should always do more.</li>
-                      <li><strong>Integrity:</strong> Our software is safe and secure.</li>
-                      <li><strong>Customer-Centricity:</strong> We tailor our technology to each and every customer.</li>
-                  </ul>
-              </div>
-          </div>
-      </div>
-  </section>
-
-  <!-- Meet The Team Section -->
-  <section class="team-section">
-      <div class="container">
-          <h2 class="section-title">Meet Our Team</h2>
-          <div class="row">
-              <!-- Team Member 1 -->
-              <div class="col-md-4">
-                  <div class="team-member">
-                      <img src="team-member-1.jpg" alt="Team Member 1" class="team-img">
-                      <h4 class="team-name">Jane Doe</h4>
-                      <p class="team-role">CEO & Founder</p>
-                      <p class="team-bio">
-                          Jane is the visionary behind SeptaSys7ems, driving the company's mission and values forward with
-                          passion and purpose.
-                      </p>
-                  </div>
-              </div>
-
-              <!-- Team Member 2 -->
-              <div class="col-md-4">
-                  <div class="team-member">
-                      <img src="team-member-2.jpg" alt="Team Member 2" class="team-img">
-                      <h4 class="team-name">John Smith</h4>
-                      <p class="team-role">Lead Developer</p>
-                      <p class="team-bio">
-                          John leads the development team, ensuring that our products are cutting-edge and meet
-                          the highest standards.
-                      </p>
-                  </div>
-              </div>
-
-              <!-- Team Member 3 -->
-              <div class="col-md-4">
-                  <div class="team-member">
-                      <img src="team-member-3.jpg" alt="Team Member 3" class="team-img">
-                      <h4 class="team-name">Emily Clark</h4>
-                      <p class="team-role">Product Manager</p>
-                      <p class="team-bio">
-                          Emily bridges the gap between development and customer needs, guiding product strategy
-                          and ensuring success.
-                      </p>
-                  </div>
-              </div>
-              <div class="col-md-4">
-                <div class="team-member"> <img src="team-member-4.jpg" alt="Team Member 4" class="team-img">
-                  <h4 class="team-name">Lance Bogrol</h4>
-                  <p class="team-role">Hardware Manager</p>
-                  <p class="team-bio"> Lance personally arrives at your home to install our security systems. </p>
+    <!-- Main Content -->
+    <section class="about-section mt-5 pt-5 content">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1 class="about-title">About Us</h1>
+                    <p class="about-text">Welcome to SeptaSy7ems, we are a computer vision and machine learning startup company. We focus on utilizing image recognition technology to keep our customers safe and secure.</p>
                 </div>
-              </div>
-          </div>
-      </div>
-  </section>
+                <div class="col-lg-6">
+                    <h2 class="about-subtitle">Our Mission</h2>
+                    <p class="about-text">Our mission is to protect our customers from theft. No longer will porch pirates steal your Amazon packages without being caught. Our flagship security system detects intruders and sends it straight to authorities for investigation.</p>
+                    <h3 class="about-subtitle">Core Values</h3>
+                    <ul class="about-list">
+                        <li><strong>Innovation:</strong> We believe software should always do more.</li>
+                        <li><strong>Integrity:</strong> Our software is safe and secure.</li>
+                        <li><strong>Customer-Centricity:</strong> We tailor our technology to each and every customer.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Footer Section -->
-  <footer class="footer">
-      <div class="container">
-          <p class="footer-text">© 2025 SeptaSys7ems. All rights reserved.</p>
-      </div>
-  </footer>
+    <!-- Meet The Team Section -->
+    <section class="team-section">
+        <div class="container">
+            <h2 class="section-title">Meet Our Team</h2>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="team-member-1.jpg" alt="Team Member 1" class="team-img">
+                        <h4 class="team-name">Jane Doe</h4>
+                        <p class="team-role">CEO & Founder</p>
+                        <p class="team-bio">Jane is the visionary behind SeptaSys7ems, driving the company's mission and values forward with passion and purpose.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="team-member-2.jpg" alt="Team Member 2" class="team-img">
+                        <h4 class="team-name">John Smith</h4>
+                        <p class="team-role">Lead Developer</p>
+                        <p class="team-bio">John leads the development team, ensuring that our products are cutting-edge and meet the highest standards.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="team-member-3.jpg" alt="Team Member 3" class="team-img">
+                        <h4 class="team-name">Emily Clark</h4>
+                        <p class="team-role">Product Manager</p>
+                        <p class="team-bio">Emily bridges the gap between development and customer needs, guiding product strategy and ensuring success.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="team-member">
+                        <img src="team-member-4.jpg" alt="Team Member 4" class="team-img">
+                        <h4 class="team-name">Lance Bogrol</h4>
+                        <p class="team-role">Hardware Manager</p>
+                        <p class="team-bio">Lance personally arrives at your home to install our security systems.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-  <!-- Link to Bootstrap JS (Optional) -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Footer Section -->
+    <!-- <footer class="footer bg-dark text-white py-3">
+        <div class="container text-center">
+            <p class="footer-text mb-0">© 2025 SeptaSys7ems. All rights reserved.</p>
+        </div>
+    </footer> -->
+
+    <!-- Link to Bootstrap JS (Optional) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        function handleLogout() {
+            alert('Logged out successfully!');
+        }
+    </script>
 </body>
 </html>
