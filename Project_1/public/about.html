@@ -1,39 +1,117 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="IE=edge">
-<title>Home - SeptaSys7ems</title>
-<!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"> -->
-<link href="css/bootstrap-4.4.1.css" rel="stylesheet" type="text/css">
-<link rel="stylesheet" href="style.css">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - SeptaSys7ems</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+	<link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="container-fluid">
-  <div class="container">
-    <nav class="navbar navbar-expand-lg navbar-light bg-light"> <a class="navbar-brand" href="#">Welcome, About page for Group 7 <img src="https://i.imgur.com/fubQ4Lr.png" alt="Logo" style="height: 60px; width: 60px;"></a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"> <span class="navbar-toggler-icon"></span> </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
+  <!-- Navbar (reuse your existing one) -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Welcome, Home page for Group 7
+        <img src="https://i.imgur.com/fubQ4Lr.png" alt="Logo" style="height: 60px; width: 60px;">
+    </a>
+    <div class="collapse navbar-collapse">
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
-          <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
-          <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-          <li class="nav-item"><a class="nav-link" href="/login">Login</a></li>
-          <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
+            <li class="nav-item"><a class="nav-link" href="/signin">Login</a></li>
+            <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
         </ul>
+    </div>
+</nav>
+
+  <!-- Main Content -->
+  <section class="about-section">
+      <div class="container">
+          <div class="row">
+              <!-- Company Overview Section -->
+              <div class="col-lg-6">
+                  <h1 class="about-title">About Us</h1>
+                  <p class="about-text">
+                      Welcome to SeptaSy7ems, 
+                  </p>
+              </div>
+
+              <!-- Mission and Values Section -->
+              <div class="col-lg-6">
+                  <h2 class="about-subtitle">Our Mission</h2>
+                  <p class="about-text">
+                    The most merciful thing in the world, I think, is the inability of the human mind to 
+                    correlate all its contents. We live on a placid island of ignorance in the midst of 
+                    black seas of infinity, and it was not meant that we should voyage far. The sciences, 
+                    each straining in its own direction, have hitherto harmed us little; but some day the 
+                    piecing together of dissociated knowledge will open up such terrifying vistas of reality, 
+                    and of our frightful position therein, that we shall either go mad from the revelation or 
+                    flee from the light into the peace and safety of a new dark age.
+                  </p>
+                  <h3 class="about-subtitle">Core Values</h3>
+                  <ul class="about-list">
+                      <li><strong>Innovation:</strong> We believe in doing shit at the last minute.</li>
+                      <li><strong>Integrity:</strong> I should've asked an AI to write these.</li>
+                      <li><strong>Customer-Centricity:</strong> I am very tired.</li>
+                  </ul>
+              </div>
+          </div>
       </div>
-    </nav>
-    <div class="hero">
-      <h1>Welcome to Group 7</h1>
-      <img src="https://i.imgur.com/fubQ4Lr.png" alt="Group 7 Logo" style="height: 100px; width: 100px;">
-      <p>tada.</p>
-      <a href="/register" class="btn btn-primary btn-lg">Register Now</a> <a href="/login" class="btn btn-secondary btn-lg">Login</a> </div>
-  </div>
-</div>
-<!-- Navbar --> 
-<!-- Hero Section --> 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+  </section>
+
+  <!-- Meet The Team Section -->
+  <section class="team-section">
+      <div class="container">
+          <h2 class="section-title">Meet Our Team</h2>
+          <div class="row">
+              <!-- Team Member 1 -->
+              <div class="col-md-4">
+                  <div class="team-member">
+                      <img src="team-member-1.jpg" alt="Team Member 1" class="team-img">
+                      <h4 class="team-name">Jane Doe</h4>
+                      <p class="team-role">CEO & Founder</p>
+                      <p class="team-bio">
+                          Jane is the visionary behind MyApp, driving the company's mission and values forward with
+                          passion and purpose.
+                      </p>
+                  </div>
+              </div>
+
+              <!-- Team Member 2 -->
+              <div class="col-md-4">
+                  <div class="team-member">
+                      <img src="team-member-2.jpg" alt="Team Member 2" class="team-img">
+                      <h4 class="team-name">John Smith</h4>
+                      <p class="team-role">Lead Developer</p>
+                      <p class="team-bio">
+                          John leads the development team, ensuring that our products are cutting-edge and meet
+                          the highest standards.
+                      </p>
+                  </div>
+              </div>
+
+              <!-- Team Member 3 -->
+              <div class="col-md-4">
+                  <div class="team-member">
+                      <img src="team-member-3.jpg" alt="Team Member 3" class="team-img">
+                      <h4 class="team-name">Emily Clark</h4>
+                      <p class="team-role">Product Manager</p>
+                      <p class="team-bio">
+                          Emily bridges the gap between development and customer needs, guiding product strategy
+                          and ensuring success.
+                      </p>
+                  </div>
+              </div>
+          </div>
+      </div>
+  </section>
+
+  <!-- Footer Section -->
+  <footer class="footer">
+      <div class="container">
+          <p class="footer-text">© 2025 MyApp. All rights reserved.</p>
+      </div>
+  </footer>
+
+  <!-- Link to Bootstrap JS (Optional) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
