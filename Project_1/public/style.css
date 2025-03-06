@@ -1,9 +1,12 @@
 @charset "utf-8";
 /* CSS Document */
+:root {
+	color-scheme: light dark;
+}
 .hero {
-	background-image: linear-gradient(red, black);
+	background-image: linear-gradient(red, light-dark(white, black));
 	background-size: cover;
-	color: white;
+	color: light-dark(black, white);
 	padding: 100px 0;
 	text-align: center;
 }
