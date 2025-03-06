@@ -1,12 +1,20 @@
 import React, { useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignIn from "./signin"; // Adjust path based on your structure
 import Register from "./register"; // Adjust path based on your structure
-import "../public/style.css";
+
 
 
 const Navbar = () => {
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        localStorage.removeItem("loggedInUser");
+        alert("You have been logged out.");
+        navigate("/signin");
+    }
+
     useEffect(() => {
         const handleResize = () => {
             const navbar = document.getElementById("navbarNav");
@@ -32,9 +40,10 @@ const Navbar = () => {
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
                         <li className="nav-item"><a className="nav-link" href="/about.html">About</a></li>
-                        <li className="nav-item"><Link className="nav-link" to="/contact">Contact</Link></li>
+                        <li className="nav-item"><a className="nav-link" href="/contact.html">Contact</a></li>
                         <li className="nav-item"><Link className="nav-link" to="/signin">Sign In</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/register">Register</Link></li>
+                        <li className="nav-item"><button className="nav-link btn btn-link" onClick={handleLogout}>Sign Out</button></li>
                     </ul>
                 </div>
             </div>
