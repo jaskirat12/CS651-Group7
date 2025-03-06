@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
 import SignIn from "./signin"; // Adjust path based on your structure
 import Register from "./register"; // Adjust path based on your structure
+import "../public/style.css";
 
 
 const Navbar = () => {
@@ -23,7 +24,7 @@ const Navbar = () => {
     return (
         <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
             <div className="container">
-                <Link className="navbar-brand" to="/">MyApp</Link>
+                <Link className="navbar-brand" to="/">SeptaSys7ems</Link>
                 <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span className="navbar-toggler-icon"></span>
                 </button>
