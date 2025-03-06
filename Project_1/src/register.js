@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
 import "./register.css";
 
-const Register = () => {
+const Register = ({ setShowRegister }) => {
     const [formData, setFormData] = useState({
         name: "",
         email: "",
         login: "",
         password: ""
     });
-    const navigate = useNavigate(); // Use useNavigate instead of useHistory
+    const navigate = useNavigate();
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,11 +17,8 @@ const Register = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Simulate storing in a database (e.g., console log or localStorage)
-        console.log("Storing in database:", formData);
-        localStorage.setItem("user", JSON.stringify(formData)); // Simulated DB storage
-
-        // Redirect to SignIn with the new login/password pre-filled
+        localStorage.setItem(formData.login, JSON.stringify(formData));
+        alert("Account created successfully!");
         navigate("/login", { state: { login: formData.login, password: formData.password } });
     };
 
@@ -84,3 +81,6 @@ const Register = () => {
 };
 
 export default Register;
+
+
+

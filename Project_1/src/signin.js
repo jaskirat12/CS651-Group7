@@ -1,15 +1,19 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./signin.css";
-
-// import sqlite3 from "sqlite3";
-
-
-
 
 const SignIn = () => {
     const [showCreateAccount, setShowCreateAccount] = useState(false);
     const [formData, setFormData] = useState({ login: "", password: "", name: "", email: "" });
+    const navigate = useNavigate();
+
+    useEffect(() => {
+        const loggedInUser = localStorage.getItem("loggedInUser");
+        if (loggedInUser) {
+            navigate("/home");
+        }
+    }, [navigate]);
+
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -17,14 +21,28 @@ const SignIn = () => {
 
     const handleLoginSubmit = (e) => {
         e.preventDefault();
-        alert(`Logged in as: ${formData.login}`);
+        const storedUser = JSON.parse(localStorage.getItem(formData.login));
+        if (storedUser && storedUser.password === formData.password) {
+            localStorage.setItem("loggedInUser", formData.login);
+            alert(`Welcome back, ${storedUser.name}!`);
+            navigate("/home"); // Redirect to home after login
+        } else {
+            alert("Invalid username or password.");
+        }
     };
 
     const handleCreateAccountSubmit = (e) => {
         e.preventDefault();
+        localStorage.setItem(formData.login, JSON.stringify(formData));
+        alert("Account Created Successfully!");
         setShowCreateAccount(false);
-        alert("Account Created!");
     };
+
+    const handleLogout = () => {
+        localStorage.removeItem("loggedInUser");
+        alert("You have been logged out.");
+        navigate("/login");
+    }
 
     return (
         <div className="signin-container">
