@@ -1,0 +1,18 @@
+.register-container {
+    margin-top: 5rem;
+}
+
+.card {
+    margin: 20px 0;
+}
+
+/* Float element as per assignment */
+.register-container::after {
+    content: "Group 7";
+    float: right;
+    font-size: 1.2rem;
+    color: #28a745;
+    padding: 10px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border-radius: 5px;
+}

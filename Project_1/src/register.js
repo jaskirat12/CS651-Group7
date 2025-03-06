@@ -1,10 +1,6 @@
-// import React, { useState } from "react";
-// import { useHistory } from "react-router-dom"; // For navigation back to SignIn
-import "./register.css";
-
 import React, { useState } from "react";
-import { useHistory } from "react-router-dom"; // For navigation back to SignIn
-
+import { useNavigate } from "react-router-dom"; // Replace useHistory with useNavigate
+import "./register.css";
 
 const Register = () => {
     const [formData, setFormData] = useState({
@@ -13,7 +9,7 @@ const Register = () => {
         login: "",
         password: ""
     });
-    const history = useHistory(); // To redirect after submission
+    const navigate = useNavigate(); // Use useNavigate instead of useHistory
 
     const handleChange = (e) => {
         setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -26,10 +22,7 @@ const Register = () => {
         localStorage.setItem("user", JSON.stringify(formData)); // Simulated DB storage
 
         // Redirect to SignIn with the new login/password pre-filled
-        history.push({
-            pathname: "/login",
-            state: { login: formData.login, password: formData.password }
-        });
+        navigate("/login", { state: { login: formData.login, password: formData.password } });
     };
 
     return (
@@ -91,4 +84,3 @@ const Register = () => {
 };
 
 export default Register;
-
