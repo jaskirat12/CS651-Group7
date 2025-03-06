@@ -6,6 +6,7 @@ import logo from "./logo.png";
 
 import SignIn from "./signin"; // Adjust path based on your structure
 import Register from "./register"; // Adjust path based on your structure
+
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 

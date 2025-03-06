@@ -1,6 +1,9 @@
 import React, { useEffect } from "react";
 import { Link } from "react-router-dom";
 import "bootstrap/dist/css/bootstrap.min.css";
+import SignIn from "./signin"; // Adjust path based on your structure
+import Register from "./register"; // Adjust path based on your structure
+
 
 const Navbar = () => {
     useEffect(() => {
@@ -27,9 +30,10 @@ const Navbar = () => {
                 <div className="collapse navbar-collapse" id="navbarNav">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item"><Link className="nav-link" to="/">Home</Link></li>
-                        <li className="nav-item"><Link className="nav-link" to="/about">About</Link></li>
+                        <li className="nav-item"><a className="nav-link" href="/about.html">About</a></li>
                         <li className="nav-item"><Link className="nav-link" to="/contact">Contact</Link></li>
                         <li className="nav-item"><Link className="nav-link" to="/signin">Sign In</Link></li>
+                        <li className="nav-item"><Link className="nav-link" to="/register">Register</Link></li>
                     </ul>
                 </div>
             </div>
