@@ -9,6 +9,7 @@ const uploadRoutes = require('./routes/upload');
 
 dotenv.config();
 
+// Firebase setup
 admin.initializeApp({
     credential: admin.credential.cert({
         projectId: process.env.FIREBASE_PROJECT_ID,

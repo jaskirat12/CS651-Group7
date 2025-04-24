@@ -7,6 +7,7 @@ const client = new vision.ImageAnnotatorClient({
     keyFilename: credsPath
 });
 
+// Function to send image to vision and return vision output
 async function analyzeImage(imageUrl) {
     try {
         console.log(`Analyzing image: ${imageUrl}`);

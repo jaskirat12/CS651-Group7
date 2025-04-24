@@ -1,4 +1,4 @@
-
+// Aunthentication Code for firebase
 const admin = require('firebase-admin');
 
 async function authenticateUser(req, res, next) {

@@ -1,3 +1,4 @@
+// Const for services
 const express = require('express');
 const router = express.Router();
 const multer = require('multer');
@@ -10,6 +11,7 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+// Multer storage setup
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
         const userDir = path.join(uploadsDir, req.user.uid);
@@ -24,6 +26,7 @@ const storage = multer.diskStorage({
     }
 });
 
+// Multer upload setup
 const upload = multer({
     storage: storage,
     limits: { fileSize: 10 * 1024 * 1024 }, 
@@ -35,6 +38,7 @@ const upload = multer({
     }
 });
 
+// User photo upload
 router.post('/', authenticateUser, upload.single('image'), (req, res) => {
     try {
         if (!req.file) {

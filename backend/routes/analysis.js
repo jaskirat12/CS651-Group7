@@ -1,13 +1,15 @@
 // backend/routes/analysis.js
+// const to import services
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
 const visionService = require('../services/vision');
 const geminiService = require('../services/gemini');
 const authenticateUser = require('../middleware/auth');
-
+// firebase
 const db = admin.firestore();
 
+// Takes image and calls vision + gemini api
 router.post('/', authenticateUser, async (req, res) => {
     try {
         const { imageUrl } = req.body;
@@ -53,6 +55,7 @@ router.post('/', authenticateUser, async (req, res) => {
     }
 });
 
+// Takes id of user and returns previous user requests
 router.get('/:id', authenticateUser, async (req, res) => {
     try {
         const { id } = req.params;
@@ -84,6 +87,7 @@ router.get('/:id', authenticateUser, async (req, res) => {
     }
 });
 
+// Returns user fashion data
 router.get('/', authenticateUser, async (req, res) => {
     try {
         const userId = req.user.uid;

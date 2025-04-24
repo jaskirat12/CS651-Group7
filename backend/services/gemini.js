@@ -6,7 +6,7 @@ dotenv.config();
 
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
-
+// Function to send image to gemini and return gemini output
 async function generateAlternatives(imageUrl, visionResults) {
     try {
         console.log('Generating alternatives with Gemini');
