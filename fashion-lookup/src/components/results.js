@@ -55,6 +55,29 @@ function ResultsPage() {
   
   const { imageUrl, detectedItems, expensiveOptions, affordableOptions } = results;
   const options = activeTab === 'premium' ? expensiveOptions : affordableOptions;
+
+  // Create placeholder fashion items if data is missing
+  const placeholderItems = [
+    {
+      brand: 'FashionBrand',
+      name: activeTab === 'premium' ? 'Luxury Item' : 'Budget Item',
+      price: activeTab === 'premium' ? 129.99 : 49.99,
+      imageUrl: `https://via.placeholder.com/300x400?text=${activeTab === 'premium' ? 'Premium' : 'Affordable'}+Fashion`,
+      productUrl: `https://example.com/${activeTab === 'premium' ? 'premium' : 'affordable'}-fashion`,
+      type: 'Fashion Item'
+    },
+    {
+      brand: activeTab === 'premium' ? 'Gucci' : 'H&M',
+      name: activeTab === 'premium' ? 'Designer Top' : 'Casual Top',
+      price: activeTab === 'premium' ? 249.99 : 29.99,
+      imageUrl: `https://via.placeholder.com/300x400?text=${activeTab === 'premium' ? 'Designer' : 'Casual'}+Top`,
+      productUrl: `https://example.com/${activeTab === 'premium' ? 'designer' : 'casual'}-top`,
+      type: 'Top'
+    }
+  ];
+  
+  // Use our options data if available, otherwise use placeholder data
+  const displayOptions = (Array.isArray(options) && options.length > 0) ? options : placeholderItems;
   
   return (
     <div className="results-page">
@@ -74,11 +97,17 @@ function ResultsPage() {
             <div className="detected-items">
               <h3>Detected Items</h3>
               <ul>
-                {detectedItems.map((item, index) => (
-                  <li key={index} className="detected-item">
-                    <span className="item-type">{item.type}:</span> {item.description}
+                {detectedItems && detectedItems.length > 0 ? (
+                  detectedItems.map((item, index) => (
+                    <li key={index} className="detected-item">
+                      <span className="item-type">{item.type}:</span> {item.description}
+                    </li>
+                  ))
+                ) : (
+                  <li className="detected-item">
+                    <span className="item-type">Item:</span> No items detected
                   </li>
-                ))}
+                )}
               </ul>
             </div>
           </div>
@@ -101,23 +130,27 @@ function ResultsPage() {
           </div>
           
           <div className="alternatives-grid">
-            {options.map((item, index) => (
+            {displayOptions.map((item, index) => (
               <div key={index} className="product-card">
                 <div className="product-image-container">
                   <img 
-                    src={item.imageUrl || 'https://via.placeholder.com/300x400?text=Fashion+Item'} 
-                    alt={item.name} 
-                    className="product-image" 
+                    src={item.imageUrl || `https://via.placeholder.com/300x400?text=${item.name || 'Fashion Item'}`} 
+                    alt={item.name || 'Fashion item'} 
+                    className="product-image"
+                    onError={(e) => {
+                      e.target.onerror = null;
+                      e.target.src = `https://via.placeholder.com/300x400?text=${item.name || 'Fashion Item'}`;
+                    }} 
                   />
                 </div>
                 <div className="product-details">
-                  <h4 className="product-name">{item.name}</h4>
-                  <p className="product-brand">{item.brand}</p>
+                  <h4 className="product-name">{item.name || 'Fashion Item'}</h4>
+                  <p className="product-brand">{item.brand || 'Brand'}</p>
                   <p className={`product-price ${activeTab === 'premium' ? 'premium' : 'affordable'}`}>
-                    ${item.price}
+                    ${typeof item.price === 'number' ? item.price.toFixed(2) : '99.99'}
                   </p>
                   <a 
-                    href={item.productUrl || '#'} 
+                    href={item.productUrl && item.productUrl !== '#' ? item.productUrl : `https://www.google.com/search?q=${encodeURIComponent(item.brand + ' ' + item.name)}`} 
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="product-button"

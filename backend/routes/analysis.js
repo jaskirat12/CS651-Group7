@@ -1,4 +1,3 @@
-// backend/routes/analysis.js
 const express = require('express');
 const router = express.Router();
 const admin = require('firebase-admin');
@@ -40,15 +39,61 @@ router.post('/', authenticateUser, async (req, res) => {
             geminiResults = {
                 detectedItems: [{ type: 'Unknown', description: 'Could not analyze item' }],
                 expensiveOptions: [
-                    { type: 'Unknown', brand: 'Example', name: 'Premium Item', price: 100, 
-                      imageUrl: 'https://via.placeholder.com/300x400?text=Example', productUrl: '#' }
+                    { 
+                        type: 'Unknown', 
+                        brand: 'Luxury Brand', 
+                        name: 'Premium Item', 
+                        price: 149.99, 
+                        imageUrl: 'https://via.placeholder.com/300x400?text=Premium+Item', 
+                        productUrl: 'https://www.google.com/search?q=luxury+fashion+items' 
+                    },
+                    { 
+                        type: 'Unknown', 
+                        brand: 'Designer Label', 
+                        name: 'Designer Item', 
+                        price: 199.99, 
+                        imageUrl: 'https://via.placeholder.com/300x400?text=Designer+Item', 
+                        productUrl: 'https://www.google.com/search?q=designer+fashion+items' 
+                    }
                 ],
                 affordableOptions: [
-                    { type: 'Unknown', brand: 'Example', name: 'Budget Item', price: 30, 
-                      imageUrl: 'https://via.placeholder.com/300x400?text=Example', productUrl: '#' }
+                    { 
+                        type: 'Unknown', 
+                        brand: 'Budget Brand', 
+                        name: 'Budget Item', 
+                        price: 39.99, 
+                        imageUrl: 'https://via.placeholder.com/300x400?text=Budget+Item', 
+                        productUrl: 'https://www.google.com/search?q=affordable+fashion+items' 
+                    },
+                    { 
+                        type: 'Unknown', 
+                        brand: 'Value Store', 
+                        name: 'Value Item', 
+                        price: 29.99, 
+                        imageUrl: 'https://via.placeholder.com/300x400?text=Value+Item', 
+                        productUrl: 'https://www.google.com/search?q=value+fashion+items' 
+                    }
                 ]
             };
         }
+
+        // Process and sanitize product options to ensure all fields are present
+        const processOptions = (options) => {
+            if (!Array.isArray(options)) return [];
+            
+            return options.map(item => ({
+                type: item.type || 'Fashion Item',
+                brand: item.brand || 'Brand',
+                name: item.name || 'Fashion Item',
+                price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 99.99,
+                imageUrl: item.imageUrl && item.imageUrl !== '#' 
+                    ? item.imageUrl 
+                    : `https://via.placeholder.com/300x400?text=${encodeURIComponent(item.name || 'Fashion Item')}`,
+                productUrl: item.productUrl && item.productUrl !== '#' 
+                    ? item.productUrl 
+                    : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || 'fashion item'))}`
+            }));
+        };
 
         // Sanitize the data before storing
         const sanitizedData = {
@@ -59,8 +104,8 @@ router.post('/', authenticateUser, async (req, res) => {
                 objects: Array.isArray(visionResults.objects) ? visionResults.objects : []
             },
             detectedItems: Array.isArray(geminiResults.detectedItems) ? geminiResults.detectedItems : [],
-            expensiveOptions: Array.isArray(geminiResults.expensiveOptions) ? geminiResults.expensiveOptions : [],
-            affordableOptions: Array.isArray(geminiResults.affordableOptions) ? geminiResults.affordableOptions : [],
+            expensiveOptions: processOptions(geminiResults.expensiveOptions),
+            affordableOptions: processOptions(geminiResults.affordableOptions),
             timestamp: admin.firestore.FieldValue.serverTimestamp()
         };
 
@@ -69,9 +114,9 @@ router.post('/', authenticateUser, async (req, res) => {
             return res.json({
                 analysisId: docRef.id,
                 imageUrl,
-                detectedItems: geminiResults.detectedItems,
-                expensiveOptions: geminiResults.expensiveOptions,
-                affordableOptions: geminiResults.affordableOptions
+                detectedItems: sanitizedData.detectedItems,
+                expensiveOptions: sanitizedData.expensiveOptions,
+                affordableOptions: sanitizedData.affordableOptions
             });
         } catch (firestoreError) {
             console.error('Firestore error:', firestoreError);
@@ -79,9 +124,9 @@ router.post('/', authenticateUser, async (req, res) => {
             return res.json({
                 analysisId: 'temp-' + Date.now(),
                 imageUrl,
-                detectedItems: geminiResults.detectedItems,
-                expensiveOptions: geminiResults.expensiveOptions,
-                affordableOptions: geminiResults.affordableOptions
+                detectedItems: sanitizedData.detectedItems,
+                expensiveOptions: sanitizedData.expensiveOptions,
+                affordableOptions: sanitizedData.affordableOptions
             });
         }
     } catch (error) {
@@ -113,12 +158,30 @@ router.get('/:id', authenticateUser, async (req, res) => {
             return res.status(403).json({ error: 'Unauthorized' });
         }
 
+        // Process options to ensure they have all required fields
+        const processOptions = (options) => {
+            if (!Array.isArray(options)) return [];
+            
+            return options.map(item => ({
+                type: item.type || 'Fashion Item',
+                brand: item.brand || 'Brand',
+                name: item.name || 'Fashion Item',
+                price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 99.99,
+                imageUrl: item.imageUrl && item.imageUrl !== '#' 
+                    ? item.imageUrl 
+                    : `https://via.placeholder.com/300x400?text=${encodeURIComponent(item.name || 'Fashion Item')}`,
+                productUrl: item.productUrl && item.productUrl !== '#' 
+                    ? item.productUrl 
+                    : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || 'fashion item'))}`
+            }));
+        };
+
         res.json({
             analysisId: docRef.id,
             imageUrl: analysis.imageUrl,
             detectedItems: analysis.detectedItems || [],
-            expensiveOptions: analysis.expensiveOptions || [],
-            affordableOptions: analysis.affordableOptions || [],
+            expensiveOptions: processOptions(analysis.expensiveOptions || []),
+            affordableOptions: processOptions(analysis.affordableOptions || []),
             timestamp: analysis.timestamp
         });
     } catch (error) {
