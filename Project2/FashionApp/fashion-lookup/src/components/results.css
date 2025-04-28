@@ -36,6 +36,34 @@
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+.results-error {
+  color: #a02222;
+}
+
+.results-error .back-button,
+.no-results .back-button {
+  margin-top: 20px;
+  display: inline-block;
+  padding: 10px 20px;
+  background-color: #a02222;
+  color: white;
+  text-decoration: none;
+  border-radius: 5px;
+  font-weight: 500;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.results-error .back-button:hover,
+.no-results .back-button:hover {
+  background-color: #8c1c1c;
 }
 
 .results-error {
@@ -262,3 +290,4 @@
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
 }
+

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import axios from 'axios';
+import { getAnalysis } from '../services/api';
 import './results.css';
 
 function ResultsPage() {
@@ -11,23 +11,23 @@ function ResultsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [activeTab, setActiveTab] = useState('premium');
+  const [imageErrors, setImageErrors] = useState({});
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchAnalysis() {
       try {
         setLoading(true);
-        const token = await currentUser.getIdToken();
         
-        const response = await axios.get(
-          `${process.env.REACT_APP_API_URL}/api/analysis/${analysisId}`,
-          {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
-          }
-        );
+        if (!analysisId) {
+          setError('No analysis ID provided');
+          setLoading(false);
+          return;
+        }
         
-        setResults(response.data);
+        const data = await getAnalysis(analysisId);
+        console.log("Fetched analysis data:", data);
+        setResults(data);
       } catch (error) {
         console.error('Analysis fetch error:', error);
         setError('Failed to load analysis results');
@@ -36,49 +36,67 @@ function ResultsPage() {
       }
     }
     
-    if (analysisId) {
-      fetchAnalysis();
+    fetchAnalysis();
+  }, [analysisId]);
+  
+  // Handle image loading errors
+  const handleImageError = (index) => {
+    console.log(`Image at index ${index} failed to load`);
+    setImageErrors(prev => ({
+      ...prev,
+      [index]: true
+    }));
+  };
+
+  // Generate placeholder image URL with improved text
+  const getPlaceholderImage = (item, isPremium) => {
+    let text = 'Fashion Item';
+    if (item.brand && item.name) {
+      text = `${item.brand} ${item.name}`;
+    } else if (item.type) {
+      text = item.type;
+    } else if (item.name) {
+      text = item.name;
     }
-  }, [analysisId, currentUser]);
+    
+    // Different colors for premium vs affordable
+    const bgColor = isPremium ? '3e4095' : '4CAF50';
+    const textColor = 'ffffff';
+    
+    return `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodeURIComponent(text)}`;
+  };
+  
+  const handleBackClick = () => {
+    navigate('/');
+  };
   
   if (loading) {
     return <div className="results-loading">Loading results...</div>;
   }
   
   if (error) {
-    return <div className="results-error">{error}</div>;
+    return (
+      <div className="results-error">
+        <p>{error}</p>
+        <button onClick={handleBackClick} className="back-button">Back to Feed</button>
+      </div>
+    );
   }
   
   if (!results) {
-    return <div className="no-results">Analysis not found</div>;
+    return (
+      <div className="no-results">
+        <p>Analysis not found</p>
+        <button onClick={handleBackClick} className="back-button">Back to Feed</button>
+      </div>
+    );
   }
   
   const { imageUrl, detectedItems, expensiveOptions, affordableOptions } = results;
-  const options = activeTab === 'premium' ? expensiveOptions : affordableOptions;
+  const options = activeTab === 'premium' ? 
+    (expensiveOptions || []) : 
+    (affordableOptions || []);
 
-  // Create placeholder fashion items if data is missing
-  const placeholderItems = [
-    {
-      brand: 'FashionBrand',
-      name: activeTab === 'premium' ? 'Luxury Item' : 'Budget Item',
-      price: activeTab === 'premium' ? 129.99 : 49.99,
-      imageUrl: `https://via.placeholder.com/300x400?text=${activeTab === 'premium' ? 'Premium' : 'Affordable'}+Fashion`,
-      productUrl: `https://example.com/${activeTab === 'premium' ? 'premium' : 'affordable'}-fashion`,
-      type: 'Fashion Item'
-    },
-    {
-      brand: activeTab === 'premium' ? 'Gucci' : 'H&M',
-      name: activeTab === 'premium' ? 'Designer Top' : 'Casual Top',
-      price: activeTab === 'premium' ? 249.99 : 29.99,
-      imageUrl: `https://via.placeholder.com/300x400?text=${activeTab === 'premium' ? 'Designer' : 'Casual'}+Top`,
-      productUrl: `https://example.com/${activeTab === 'premium' ? 'designer' : 'casual'}-top`,
-      type: 'Top'
-    }
-  ];
-  
-  // Use our options data if available, otherwise use placeholder data
-  const displayOptions = (Array.isArray(options) && options.length > 0) ? options : placeholderItems;
-  
   return (
     <div className="results-page">
       <div className="results-header">
@@ -91,7 +109,16 @@ function ResultsPage() {
           <div className="outfit-card">
             <div className="outfit-header">Original Outfit</div>
             <div className="outfit-image-container">
-              <img src={imageUrl} alt="Original outfit" className="outfit-image" />
+              <img 
+                src={imageUrl} 
+                alt="Original outfit" 
+                className="outfit-image"
+                onError={(e) => {
+                  console.log("Original image failed to load");
+                  e.target.onerror = null;
+                  e.target.src = "https://via.placeholder.com/600x800/888888/ffffff?text=Original+Outfit";
+                }} 
+              />
             </div>
             
             <div className="detected-items">
@@ -100,7 +127,7 @@ function ResultsPage() {
                 {detectedItems && detectedItems.length > 0 ? (
                   detectedItems.map((item, index) => (
                     <li key={index} className="detected-item">
-                      <span className="item-type">{item.type}:</span> {item.description}
+                      <span className="item-type">{item.type || 'Item'}:</span> {item.description || 'No description available'}
                     </li>
                   ))
                 ) : (
@@ -129,38 +156,58 @@ function ResultsPage() {
             </button>
           </div>
           
-          <div className="alternatives-grid">
-            {displayOptions.map((item, index) => (
-              <div key={index} className="product-card">
-                <div className="product-image-container">
-                  <img 
-                    src={item.imageUrl || `https://via.placeholder.com/300x400?text=${item.name || 'Fashion Item'}`} 
-                    alt={item.name || 'Fashion item'} 
-                    className="product-image"
-                    onError={(e) => {
-                      e.target.onerror = null;
-                      e.target.src = `https://via.placeholder.com/300x400?text=${item.name || 'Fashion Item'}`;
-                    }} 
-                  />
-                </div>
-                <div className="product-details">
-                  <h4 className="product-name">{item.name || 'Fashion Item'}</h4>
-                  <p className="product-brand">{item.brand || 'Brand'}</p>
-                  <p className={`product-price ${activeTab === 'premium' ? 'premium' : 'affordable'}`}>
-                    ${typeof item.price === 'number' ? item.price.toFixed(2) : '99.99'}
-                  </p>
-                  <a 
-                    href={item.productUrl && item.productUrl !== '#' ? item.productUrl : `https://www.google.com/search?q=${encodeURIComponent(item.brand + ' ' + item.name)}`} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="product-button"
-                  >
-                    View Product
-                  </a>
-                </div>
-              </div>
-            ))}
-          </div>
+          {options.length === 0 ? (
+            <div className="no-options">
+              <p>No {activeTab} options found for this outfit.</p>
+            </div>
+          ) : (
+            <div className="alternatives-grid">
+              {options.map((item, index) => {
+                // Determine the image source
+                const isPremium = activeTab === 'premium';
+                const placeholderSrc = getPlaceholderImage(item, isPremium);
+                
+                // Use the image URL unless it's an error or placeholder.jpg
+                let imageSrc = item.imageUrl;
+                
+                // If it's a basic placeholder or the image previously errored, use our enhanced placeholder
+                if (imageErrors[index] || 
+                    !imageSrc || 
+                    imageSrc === 'placeholder.jpg' || 
+                    imageSrc === '#') {
+                  imageSrc = placeholderSrc;
+                }
+                
+                return (
+                  <div key={index} className="product-card">
+                    <div className="product-image-container">
+                      <img 
+                        src={imageSrc}
+                        alt={item.name || 'Fashion item'} 
+                        className="product-image"
+                        onError={() => handleImageError(index)}
+                      />
+                    </div>
+                    <div className="product-details">
+                      <h4 className="product-name">{item.name || 'Fashion Item'}</h4>
+                      <p className="product-brand">{item.brand || 'Brand'}</p>
+                      <p className={`product-price ${isPremium ? 'premium' : 'affordable'}`}>
+                        ${typeof item.price === 'number' ? item.price.toFixed(2) : '99.99'}
+                      </p>
+                      <a 
+                        href={item.productUrl && item.productUrl !== '#' ? item.productUrl : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || '') + ' ' + (item.type || 'fashion item'))}`} 
+                        target="_blank" 
+                        rel="noopener noreferrer" 
+                        className="product-button"
+                      >
+                        View Product
+                      </a>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
           
           <div className="sharing-options">
             <h3>Share your fashion find</h3>

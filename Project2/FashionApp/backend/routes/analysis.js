@@ -38,61 +38,37 @@ router.post('/', authenticateUser, async (req, res) => {
             // Provide default values if Gemini API fails
             geminiResults = {
                 detectedItems: [{ type: 'Unknown', description: 'Could not analyze item' }],
-                expensiveOptions: [
-                    { 
-                        type: 'Unknown', 
-                        brand: 'Luxury Brand', 
-                        name: 'Premium Item', 
-                        price: 149.99, 
-                        imageUrl: 'https://via.placeholder.com/300x400?text=Premium+Item', 
-                        productUrl: 'https://www.google.com/search?q=luxury+fashion+items' 
-                    },
-                    { 
-                        type: 'Unknown', 
-                        brand: 'Designer Label', 
-                        name: 'Designer Item', 
-                        price: 199.99, 
-                        imageUrl: 'https://via.placeholder.com/300x400?text=Designer+Item', 
-                        productUrl: 'https://www.google.com/search?q=designer+fashion+items' 
-                    }
-                ],
-                affordableOptions: [
-                    { 
-                        type: 'Unknown', 
-                        brand: 'Budget Brand', 
-                        name: 'Budget Item', 
-                        price: 39.99, 
-                        imageUrl: 'https://via.placeholder.com/300x400?text=Budget+Item', 
-                        productUrl: 'https://www.google.com/search?q=affordable+fashion+items' 
-                    },
-                    { 
-                        type: 'Unknown', 
-                        brand: 'Value Store', 
-                        name: 'Value Item', 
-                        price: 29.99, 
-                        imageUrl: 'https://via.placeholder.com/300x400?text=Value+Item', 
-                        productUrl: 'https://www.google.com/search?q=value+fashion+items' 
-                    }
-                ]
+                expensiveOptions: [],
+                affordableOptions: []
             };
         }
 
-        // Process and sanitize product options to ensure all fields are present
-        const processOptions = (options) => {
+        // Process and sanitize product options to ensure all fields are present and valid
+        const processOptions = (options, isPremium = true) => {
             if (!Array.isArray(options)) return [];
             
-            return options.map(item => ({
-                type: item.type || 'Fashion Item',
-                brand: item.brand || 'Brand',
-                name: item.name || 'Fashion Item',
-                price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 99.99,
-                imageUrl: item.imageUrl && item.imageUrl !== '#' 
-                    ? item.imageUrl 
-                    : `https://via.placeholder.com/300x400?text=${encodeURIComponent(item.name || 'Fashion Item')}`,
-                productUrl: item.productUrl && item.productUrl !== '#' 
-                    ? item.productUrl 
-                    : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || 'fashion item'))}`
-            }));
+            return options.map((item, index) => {
+                // Create descriptive placeholder text for the image
+                const placeholderText = `${item.brand || ''} ${item.name || ''} ${item.type || 'Fashion Item'}`.trim();
+                const encodedText = encodeURIComponent(placeholderText);
+                
+                // Generate appropriate colors for premium vs affordable
+                const bgColor = isPremium ? '3e4095' : '4CAF50';
+                const textColor = 'ffffff';
+                
+                return {
+                    type: item.type || 'Fashion Item',
+                    brand: item.brand || 'Brand',
+                    name: item.name || 'Fashion Item',
+                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || (isPremium ? 159.99 : 39.99),
+                    imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
+                        ? item.imageUrl 
+                        : `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodedText}`,
+                    productUrl: (item.productUrl && item.productUrl !== '#') 
+                        ? item.productUrl 
+                        : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || '') + ' ' + (item.type || 'fashion item'))}`
+                };
+            });
         };
 
         // Sanitize the data before storing
@@ -104,8 +80,8 @@ router.post('/', authenticateUser, async (req, res) => {
                 objects: Array.isArray(visionResults.objects) ? visionResults.objects : []
             },
             detectedItems: Array.isArray(geminiResults.detectedItems) ? geminiResults.detectedItems : [],
-            expensiveOptions: processOptions(geminiResults.expensiveOptions),
-            affordableOptions: processOptions(geminiResults.affordableOptions),
+            expensiveOptions: processOptions(geminiResults.expensiveOptions, true),
+            affordableOptions: processOptions(geminiResults.affordableOptions, false),
             timestamp: admin.firestore.FieldValue.serverTimestamp()
         };
 
@@ -158,30 +134,40 @@ router.get('/:id', authenticateUser, async (req, res) => {
             return res.status(403).json({ error: 'Unauthorized' });
         }
 
-        // Process options to ensure they have all required fields
-        const processOptions = (options) => {
+        // Process options to ensure they have all required fields and valid images
+        const processOptions = (options, isPremium = true) => {
             if (!Array.isArray(options)) return [];
             
-            return options.map(item => ({
-                type: item.type || 'Fashion Item',
-                brand: item.brand || 'Brand',
-                name: item.name || 'Fashion Item',
-                price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || 99.99,
-                imageUrl: item.imageUrl && item.imageUrl !== '#' 
-                    ? item.imageUrl 
-                    : `https://via.placeholder.com/300x400?text=${encodeURIComponent(item.name || 'Fashion Item')}`,
-                productUrl: item.productUrl && item.productUrl !== '#' 
-                    ? item.productUrl 
-                    : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || 'fashion item'))}`
-            }));
+            return options.map((item, index) => {
+                // Create descriptive placeholder text for the image
+                const placeholderText = `${item.brand || ''} ${item.name || ''} ${item.type || 'Fashion Item'}`.trim();
+                const encodedText = encodeURIComponent(placeholderText);
+                
+                // Generate appropriate colors for premium vs affordable
+                const bgColor = isPremium ? '3e4095' : '4CAF50';
+                const textColor = 'ffffff';
+                
+                return {
+                    type: item.type || 'Fashion Item',
+                    brand: item.brand || 'Brand',
+                    name: item.name || 'Fashion Item',
+                    price: typeof item.price === 'number' ? item.price : parseFloat(item.price) || (isPremium ? 159.99 : 39.99),
+                    imageUrl: (item.imageUrl && item.imageUrl !== '#' && item.imageUrl !== 'placeholder.jpg') 
+                        ? item.imageUrl 
+                        : `https://via.placeholder.com/500x600/${bgColor}/${textColor}?text=${encodedText}`,
+                    productUrl: (item.productUrl && item.productUrl !== '#') 
+                        ? item.productUrl 
+                        : `https://www.google.com/search?q=${encodeURIComponent((item.brand || '') + ' ' + (item.name || '') + ' ' + (item.type || 'fashion item'))}`
+                };
+            });
         };
 
         res.json({
             analysisId: docRef.id,
             imageUrl: analysis.imageUrl,
             detectedItems: analysis.detectedItems || [],
-            expensiveOptions: processOptions(analysis.expensiveOptions || []),
-            affordableOptions: processOptions(analysis.affordableOptions || []),
+            expensiveOptions: processOptions(analysis.expensiveOptions || [], true),
+            affordableOptions: processOptions(analysis.affordableOptions || [], false),
             timestamp: analysis.timestamp
         });
     } catch (error) {
@@ -196,11 +182,22 @@ router.get('/', authenticateUser, async (req, res) => {
         const userId = req.user.uid;
 
         try {
-            const snapshot = await db.collection('analyses')
-                .where('userId', '==', userId)
-                .orderBy('timestamp', 'desc')
-                .limit(10)
-                .get();
+            // Create a basic query without the orderBy (which requires an index)
+            let query = db.collection('analyses')
+                .where('userId', '==', userId);
+                
+            // Try to get the most recent analyses
+            // If the index error occurs, we'll catch it and use a simpler query
+            try {
+                query = query.orderBy('timestamp', 'desc');
+            } catch (indexError) {
+                console.warn('Index not available for timestamp ordering, using basic query');
+            }
+                
+            // Limit to 10 results
+            query = query.limit(10);
+            
+            const snapshot = await query.get();
 
             const analyses = snapshot.docs.map(doc => {
                 const data = doc.data();
@@ -214,9 +211,29 @@ router.get('/', authenticateUser, async (req, res) => {
 
             res.json({ analyses });
         } catch (firestoreError) {
-            console.error('Firestore query error:', firestoreError);
-            // Return empty analyses array if Firestore query fails
-            res.json({ analyses: [] });
+            // If we get the index error, try a simpler query without ordering
+            if (firestoreError.code === 9 && firestoreError.details && firestoreError.details.includes('index')) {
+                console.warn('Using fallback query without ordering due to missing index');
+                const snapshot = await db.collection('analyses')
+                    .where('userId', '==', userId)
+                    .limit(10)
+                    .get();
+                
+                const analyses = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    return {
+                        id: doc.id,
+                        imageUrl: data.imageUrl,
+                        detectedItems: data.detectedItems || [],
+                        timestamp: data.timestamp ? data.timestamp.toDate() : new Date()
+                    };
+                });
+                
+                res.json({ analyses });
+            } else {
+                console.error('Firestore query error:', firestoreError);
+                res.json({ analyses: [] });
+            }
         }
     } catch (error) {
         console.error('Get analyses error:', error);
