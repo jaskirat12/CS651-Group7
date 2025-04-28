@@ -11,6 +11,12 @@ if (!fs.existsSync(uploadsDir)) {
     fs.mkdirSync(uploadsDir, { recursive: true });
 }
 
+function sanitizeFilename(filename) {
+    return filename.replace(/[^a-zA-Z0-9.-]/g, '_');
+}
+  
+
+
 // Multer storage setup
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -21,7 +27,8 @@ const storage = multer.diskStorage({
         cb(null, userDir);
     },
     filename: function (req, file, cb) {
-        const uniqueFilename = Date.now() + '-' + file.originalname;
+        // const uniqueFilename = Date.now() + '-' + file.originalname;
+        const uniqueFilename = Date.now() + '-' + sanitizeFilename(file.originalname);
         cb(null, uniqueFilename);
     }
 });

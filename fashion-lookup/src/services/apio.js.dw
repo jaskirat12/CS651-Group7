@@ -28,45 +28,13 @@ export const analyzeImage = async (imageUrl) => {
     }
 };
 
-// Mock data for development purposes
-const mockAnalyses = {
-    analyses: [
-        {
-            id: 'analysis1',
-            imageUrl: 'https://via.placeholder.com/400x600?text=Fashion+Outfit+1',
-            detectedItems: [
-                { type: 'Shirt', description: 'Blue button-down shirt' },
-                { type: 'Pants', description: 'Beige chinos' }
-            ],
-            timestamp: new Date().toISOString()
-        },
-        {
-            id: 'analysis2',
-            imageUrl: 'https://via.placeholder.com/400x600?text=Fashion+Outfit+2',
-            detectedItems: [
-                { type: 'Jacket', description: 'Black leather jacket' },
-                { type: 'Jeans', description: 'Dark blue jeans' }
-            ],
-            timestamp: new Date().toISOString()
-        }
-    ]
-};
-
 export const getUserAnalyses = async () => {
     try {
-        // try to fetch from API first
-        try {
-            const response = await api.get('/analyses');
-            return response.data;
-        } catch (apiError) {
-            console.warn('API request failed, using mock data:', apiError);
-            // fffffffffall back to mock data if API fails
-            return mockAnalyses;
-        }
+        const response = await api.get('/analyses');
+        return response.data;
     } catch (error) {
         console.error('Error fetching analyses:', error);
-        // alright for rn we're just gonna still return mock data even if there's an error handling the API failure
-        return mockAnalyses;
+        throw error;
     }
 };
 

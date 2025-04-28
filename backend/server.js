@@ -10,14 +10,27 @@ const uploadRoutes = require('./routes/upload');
 dotenv.config();
 
 // Firebase setup
+
+// admin.initializeApp({
+//     credential: admin.credential.cert({
+//         projectId: process.env.FIREBASE_PROJECT_ID,
+//         clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
+//         privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
+//     }),
+//     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+// });
+
 admin.initializeApp({
-    credential: admin.credential.cert({
-        projectId: process.env.FIREBASE_PROJECT_ID,
-        clientEmail: process.env.FIREBASE_CLIENT_EMAIL,
-        privateKey: process.env.FIREBASE_PRIVATE_KEY.replace(/\\n/g, '\n')
-    }),
+    credential: admin.credential.applicationDefault(),
     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
 });
+
+// const serviceAccount = require('./services/creds.json');
+
+// admin.initializeApp({
+//     credential: admin.credential.cert(serviceAccount),
+//     storageBucket: process.env.FIREBASE_STORAGE_BUCKET
+// });
 
 const app = express();
 

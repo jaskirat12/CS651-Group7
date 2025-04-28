@@ -1,21 +1,44 @@
-
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
 import axios from 'axios';
 import './imageupload.css';
 
-function ImageUpload({ onImageAnalyzed }) {
+function ImageUpload({ onImageAnalyzed, onSuccess }) {
     const [file, setFile] = useState(null);
     const [imageUrl, setImageUrl] = useState('');
     const [uploading, setUploading] = useState(false);
     const [error, setError] = useState('');
     const { currentUser } = useAuth();
 
+    const fileInputRef = useRef(null);
+    const navigate = useNavigate();
+
+
     function handleFileChange(e) {
         if (e.target.files[0]) {
             setFile(e.target.files[0]);
             setImageUrl(URL.createObjectURL(e.target.files[0]));
         }
+    }
+
+    function handleDrop(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+            setFile(e.dataTransfer.files[0]);
+            setImageUrl(URL.createObjectURL(e.dataTransfer.files[0]));
+        }
+    }
+
+    function handleDragOver(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+
+    function triggerFileInput() {
+        fileInputRef.current.click();
     }
 
     async function handleUpload() {
@@ -30,6 +53,7 @@ function ImageUpload({ onImageAnalyzed }) {
 
             const token = await currentUser.getIdToken();
 
+            // for future commenting we have the upload image part here:
             const response = await axios.post(
                 `${process.env.REACT_APP_API_URL}/api/upload`,
                 formData,
@@ -56,11 +80,14 @@ function ImageUpload({ onImageAnalyzed }) {
                 }
             );
 
+            if (onSuccess) {
+                onSuccess();
+            } else if (onImageAnalyzed) {
+                onImageAnalyzed();
+            }
+            // Redirect to results page
             
-            onImageAnalyzed({
-                imageUrl,
-                ...analysisResponse.data
-            });
+            navigate(`/results/${analysisResponse.data.analysisId}`);
         } catch (error) {
             console.error('Upload/analysis error:', error);
             setError('Failed to upload or analyze image');
@@ -70,39 +97,40 @@ function ImageUpload({ onImageAnalyzed }) {
     }
 
     return (
-        <div className="upload-container">
-            <h2>Upload an Outfit</h2>
+        <div className="image-upload">
+            <h3>Upload an Outfit</h3>
 
-            <div className="upload-area">
-                <input
-                    type="file"
-                    id="file-input"
-                    accept="image/*"
-                    onChange={handleFileChange}
-                    style={{ display: 'none' }}
-                />
-                <label htmlFor="file-input" className="file-input-label">
-                    Select Image
-                </label>
-
-                {imageUrl && (
-                    <div className="image-preview">
-                        <img src={imageUrl} alt="Selected" />
+            <div 
+                className="drop-area" 
+                onDrop={handleDrop} 
+                onDragOver={handleDragOver}
+                onClick={triggerFileInput}
+            >
+                {imageUrl ? (
+                    <img src={imageUrl} alt="Preview" className="image-preview" />
+                ) : (
+                    <div className="upload-prompt">
+                        <span className="upload-icon" role="img" aria-label="camera">📷</span>
+                        <p>Drag & drop an image or click to browse</p>
                     </div>
                 )}
-
-                {file && (
-                    <button
-                        className="analyze-button"
-                        onClick={handleUpload}
-                        disabled={uploading}
-                    >
-                        {uploading ? 'Processing...' : 'Analyze Outfit'}
-                    </button>
-                )}
-
-                {error && <p className="upload-error">{error}</p>}
+                
+                <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileChange}
+                    ref={fileInputRef}
+                    style={{ display: 'none' }}
+                />
             </div>
+
+            {error && <p className="upload-error">{error}</p>}
+
+            {file && !uploading && (
+                <button className="analyze-button" onClick={handleUpload}>
+                    Analyze Outfit
+                </button>
+            )}
         </div>
     );
 }

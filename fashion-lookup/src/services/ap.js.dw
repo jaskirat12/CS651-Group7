@@ -54,18 +54,18 @@ const mockAnalyses = {
 
 export const getUserAnalyses = async () => {
     try {
-        // try to fetch from API first
+        // Try to fetch from API first
         try {
             const response = await api.get('/analyses');
             return response.data;
         } catch (apiError) {
             console.warn('API request failed, using mock data:', apiError);
-            // fffffffffall back to mock data if API fails
+            // Fall back to mock data if API fails
             return mockAnalyses;
         }
     } catch (error) {
         console.error('Error fetching analyses:', error);
-        // alright for rn we're just gonna still return mock data even if there's an error handling the API failure
+        // Still return mock data even if there's an error handling the API failure
         return mockAnalyses;
     }
 };

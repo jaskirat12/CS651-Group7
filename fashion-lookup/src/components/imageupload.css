@@ -1,54 +1,98 @@
+.image-upload {
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
 
-.upload-container {
+.image-upload h3 {
+  margin-top: 0;
+  margin-bottom: 15px;
+  color: #333;
   text-align: center;
 }
 
-.upload-area {
-  margin-top: 20px;
-}
-
-.file-input-label {
-  display: inline-block;
-  padding: 12px 20px;
-  background-color: #4285F4;
-  color: #fff;
-  border-radius: 4px;
+.drop-area {
+  border: 2px dashed #ccc;
+  border-radius: 8px;
+  padding: 20px;
+  text-align: center;
   cursor: pointer;
-  font-weight: 500;
-  margin-bottom: 20px;
+  background-color: #f9f9f9;
+  transition: all 0.3s ease;
+  min-height: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.file-input-label:hover {
-  background-color: #357ae8;
+.drop-area:hover {
+  border-color: #a02222;
+  background-color: #f5f5f5;
+}
+
+.upload-prompt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.upload-icon {
+  font-size: 32px;
+  margin-bottom: 10px;
 }
 
 .image-preview {
-  margin: 20px 0;
-  max-width: 400px;
-  margin: 20px auto;
-}
-
-.image-preview img {
   max-width: 100%;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  border-radius: 5px;
 }
 
-.analyze-button {
-  padding: 12px 24px;
+.upload-progress {
+  margin-top: 15px;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 10px;
+  background-color: #f0f0f0;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-bottom: 5px;
+}
+
+.progress-fill {
+  height: 100%;
   background-color: #4CAF50;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  font-size: 16px;
-  font-weight: 500;
-}
-
-.analyze-button:hover {
-  background-color: #43A047;
+  border-radius: 5px;
 }
 
 .upload-error {
-  color: #d32f2f;
-  margin-top: 20px;
+  color: #a02222;
+  margin-top: 15px;
+  text-align: center;
+}
+
+.analyze-button {
+  display: block;
+  width: 100%;
+  padding: 12px;
+  margin-top: 15px;
+  background-color: #a02222;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.analyze-button:hover {
+  background-color: #8c1c1c;
+}
+
+.analyze-button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
 }
